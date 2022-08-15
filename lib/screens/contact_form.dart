@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../database/dao/dao.dart';
-import '../../models/models.dart';
+import '../database/database.dart';
+import '../models/models.dart';
 
 class ContactForm extends StatefulWidget {
   @override
@@ -19,7 +19,6 @@ class _ContactFormState extends State<ContactForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text('New contact'),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

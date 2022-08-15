@@ -1,48 +1,36 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class NameCubit extends Cubit<String> {
-  NameCubit(String name) : super(name);
+import '../components/container.dart';
+import '../models/models.dart';
 
-  void change(String name) => emit(name);
-}
-
-class NameContainer extends StatelessWidget {
-
+class NameContainer extends BlocContainer {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (contextBloc) => NameCubit('Rivaldo R.'),
-      child: NameView(),
-    );
+    return NameView();
   }
 }
 
-class NameView extends StatefulWidget {
-
-  @override
-  State<NameView> createState() => _NameViewState();
-}
-
-class _NameViewState extends State<NameView> {
+class NameView extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    // agora não tem problema essa abordagem
+    // pois não vamos fazer um rebuild quando o estado é alterado
     _nameController.text = context.read<NameCubit>().state;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Change name'),
-      ),
+      appBar: AppBar(title: const Text("Change name")),
       body: Column(
         children: [
           TextField(
             controller: _nameController,
             decoration: InputDecoration(
-              labelText: 'Desired name',
+              labelText: "Desired name",
             ),
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 24.0,
             ),
           ),
           Padding(
@@ -50,12 +38,12 @@ class _NameViewState extends State<NameView> {
             child: SizedBox(
               width: double.maxFinite,
               child: ElevatedButton(
+                child: Text("Change"),
                 onPressed: () {
                   final name = _nameController.text;
                   context.read<NameCubit>().change(name);
-                  Navigator.of(context).pop();
-                }, 
-                child: Text('Change')
+                  Navigator.pop(context);
+                },
               ),
             ),
           ),

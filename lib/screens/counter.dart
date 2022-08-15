@@ -1,40 +1,42 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bytebank/components/container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// Exemplo de contator utilizando Bloc em duas variações
+// Exemplo de contador utilizando Bloc
+// Em duas variações
+
 class CounterCubit extends Cubit<int> {
   CounterCubit() : super(0);
 
   void increment() => emit(state + 1);
 
   void decrement() => emit(state - 1);
-
 }
 
-class CounterContainer extends StatelessWidget {
+class CounterContainer extends BlocContainer {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => CounterCubit(),
-      child: CounterView(),
-    );
+    return BlocProvider(create: (_) => CounterCubit(), child: CounterView());
   }
 }
 
 class CounterView extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    // não temos como saber quando devemos redesenhar
+    // final state = context.bloc<CounterCubit>().state;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Counter'),
-      ),
+      appBar: AppBar(title: const Text("Counter")),
       body: Center(
-        // Abordagem 2 de como acessar o bloc
+        // ruim não sabemos quando rebuildar
+        // child: Text("$state", style: textTheme.headline2),
+
+        // é notificado quando deve ser rebuildado
         child: BlocBuilder<CounterCubit, int>(builder: (context, state) {
-          return Text('$state', style: textTheme.headline2);
-        },)
+          return Text("$state", style: textTheme.headline2);
+        }),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -42,16 +44,14 @@ class CounterView extends StatelessWidget {
         children: [
           FloatingActionButton(
             child: const Icon(Icons.add),
-            // Abordagem 1 de como acessar o bloc
-            onPressed: () => context.read<CounterCubit>().increment()
+            // abordagem 1 de como acessar o bloc
+            onPressed: () => context.read<CounterCubit>().increment(),
           ),
-          SizedBox(height: 15,),
+          const SizedBox(height: 8),
           FloatingActionButton(
-            backgroundColor: Colors.red,
             child: const Icon(Icons.remove),
-            // Abordagem 1 de como acessar o bloc
-            onPressed: () => context.read<CounterCubit>().decrement()
-          ),          
+            onPressed: () => context.read<CounterCubit>().decrement(),
+          ),
         ],
       ),
     );

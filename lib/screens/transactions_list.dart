@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../http/webclients/webclients.dart';
 import '../components/components.dart';
 import '../models/models.dart';
+import '../http/http.dart';
 
 class TransactionsList extends StatelessWidget {
 
@@ -13,7 +13,6 @@ class TransactionsList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transactions'),
-        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: FutureBuilder<List<Transaction>>(
         future: _webClient.findAll(),
