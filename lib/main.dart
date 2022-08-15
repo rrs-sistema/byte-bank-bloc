@@ -14,7 +14,7 @@ class BytebankApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: bytebankTheme,
-      home: Dashboard(),
+      home: NameContainer(),
     );
   }
 }
