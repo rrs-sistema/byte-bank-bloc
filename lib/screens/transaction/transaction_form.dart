@@ -1,88 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'dart:async';
 
-import '../components/components.dart';
-import '../models/models.dart';
-import '../http/http.dart';
-
-@immutable
-abstract class TransactionFormState {
-  const TransactionFormState();
-}
-
-@immutable
-class SendingState extends TransactionFormState {
-  const SendingState();
-}
-
-@immutable
-class ShowFormState extends TransactionFormState {
-  const ShowFormState();
-}
-
-@immutable
-class SentState extends TransactionFormState {
-  const SentState();
-}
-
-@immutable
-class FatalErrorFormState extends TransactionFormState {
-  final String _message;
-
-  const FatalErrorFormState(this._message);
-}
-
-class TransactionFormCubit extends Cubit<TransactionFormState> {
-  TransactionFormCubit() : super(ShowFormState());
-
-  void save(Transaction transactionCreated, String password,
-      BuildContext context) async {
-    emit(SendingState());
-    await _send(
-      transactionCreated,
-      password,
-      context,
-    );
-  }
-
-  _send(Transaction transactionCreated, String password,
-      BuildContext context) async {
-    await TransactionWebClient()
-        .save(transactionCreated, password)
-        .then((transaction) => emit(SentState()))
-        .catchError((e) {
-      emit(FatalErrorFormState(e.message));
-    }, test: (e) => e is HttpException).catchError((e) {
-      emit(FatalErrorFormState('timeout submitting the transaction'));
-    }, test: (e) => e is TimeoutException).catchError((e) {
-      emit(FatalErrorFormState(e.message));
-    });
-  }
-}
-
-class TransactionFormContainer extends BlocContainer {
-  final Contact _contact;
-
-  TransactionFormContainer(this._contact);
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<TransactionFormCubit>(
-        create: (BuildContext context) {
-          return TransactionFormCubit();
-        },
-        child: BlocListener<TransactionFormCubit, TransactionFormState>(
-          listener: (context, state) {
-            if (state is SentState) {
-              Navigator.pop(context);
-            }
-          },
-          child: TransactionFormStaless(_contact),
-        ));
-  }
-}
+import '../../components/components.dart';
+import '../../models/models.dart';
+import './transaction.dart';
 
 class TransactionFormStaless extends StatelessWidget {
   final Contact _contact;
@@ -100,7 +22,7 @@ class TransactionFormStaless extends StatelessWidget {
         return ProgressView();
       }
       if (state is FatalErrorFormState) {
-        return ErrorView(state._message);
+        return ErrorView(state.message);
       }
       return ErrorView("Unknown error");
     });
@@ -116,9 +38,11 @@ class _BasicForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text('New transaction'),
+        backgroundColor: primaryColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -156,6 +80,7 @@ class _BasicForm extends StatelessWidget {
                 child: SizedBox(
                   width: double.maxFinite,
                   child: ElevatedButton(
+                    style: styleButton(primaryColor),
                     child: Text('Transfer'),
                     onPressed: () {
                       final double value =

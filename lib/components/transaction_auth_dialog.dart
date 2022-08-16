@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../components/components.dart';
+
 class TransactionAuthDialog extends StatefulWidget {
   final Function(String password) onConfirm;
 
@@ -30,10 +32,12 @@ class _TransactionAuthDialogState extends State<TransactionAuthDialog> {
       ),
       actions: <Widget>[
         ElevatedButton(
+          style: styleButton(Colors.red),
           onPressed: () => Navigator.pop(context),
           child: Text('Cancel'),
         ),
         ElevatedButton(
+          style: styleButton(Theme.of(context).primaryColor),
           onPressed: () {
             widget.onConfirm(_passwordController.text);
             Navigator.pop(context);

@@ -1,62 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
-import '../components/components.dart';
-import '../database/database.dart';
-import '../screens/screens.dart';
-import '../models/models.dart';
-
-@immutable
-abstract class ContactsListState {
-  const ContactsListState();
-}
-
-@immutable
-class LoadingContactsListState extends ContactsListState {
-  const LoadingContactsListState();
-}
-
-@immutable
-class InitContactsListState extends ContactsListState {
-  const InitContactsListState();
-}
-
-@immutable
-class LoadedContactsListState extends ContactsListState {
-  final List<Contact> _contacts;
-
-  const LoadedContactsListState(this._contacts);
-}
-
-@immutable
-class FatalErrorContactsListState extends ContactsListState {
-  const FatalErrorContactsListState();
-}
-
-class ContactsListCubit extends Cubit<ContactsListState> {
-  ContactsListCubit() : super(InitContactsListState());
-
-  void reload(ContactDao dao) async {
-    emit(LoadingContactsListState());
-    dao.findAll().then((contacts) => emit(LoadedContactsListState(contacts)));
-  }
-}
-
-class ContactsListContainer extends BlocContainer {
-  @override
-  Widget build(BuildContext context) {
-    final ContactDao dao = ContactDao();
-
-    return BlocProvider<ContactsListCubit>(
-      create: (BuildContext context) {
-        final cubit = ContactsListCubit();
-        cubit.reload(dao);
-        return cubit;
-      },
-      child: ContactsList(dao),
-    );
-  }
-}
+import '../../components/components.dart';
+import '../../database/database.dart';
+import '../../screens/screens.dart';
+import '../../models/models.dart';
 
 class ContactsList extends StatelessWidget {
   final ContactDao _dao;
@@ -68,6 +16,7 @@ class ContactsList extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transfer'),
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       body: BlocBuilder<ContactsListCubit, ContactsListState>(
         builder: (context, state) {
@@ -76,7 +25,7 @@ class ContactsList extends StatelessWidget {
             return Progress();
           }
           if (state is LoadedContactsListState) {
-            final contacts = state._contacts;
+            final contacts = state.contacts;
             return ListView.builder(
               itemBuilder: (context, index) {
                 final contact = contacts[index];
@@ -99,6 +48,7 @@ class ContactsList extends StatelessWidget {
 
   FloatingActionButton buildAddContactButton(BuildContext context) {
     return FloatingActionButton(
+      backgroundColor: Theme.of(context).primaryColor,
       onPressed: () async {
         await Navigator.of(context).push(
           MaterialPageRoute(

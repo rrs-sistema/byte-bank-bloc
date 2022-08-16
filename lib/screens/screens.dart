@@ -1,7 +1,5 @@
-export './transactions_list.dart';
-export './transaction_form.dart';
-export './contacts_list.dart';
-export './contact_form.dart';
-export './dashboard.dart';
+export './transaction/transaction.dart';
+export './dashboard/dashboard.dart';
+export './contacts/contact.dart';
 export './counter.dart';
 export './name.dart';

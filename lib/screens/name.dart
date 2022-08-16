@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../components/container.dart';
+import '../../components/components.dart';
 import '../models/models.dart';
 
 class NameContainer extends BlocContainer {
@@ -20,8 +20,12 @@ class NameView extends StatelessWidget {
     // agora não tem problema essa abordagem
     // pois não vamos fazer um rebuild quando o estado é alterado
     _nameController.text = context.read<NameCubit>().state;
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
-      appBar: AppBar(title: const Text("Change name")),
+      appBar: AppBar(
+        title: const Text("Change name"),
+        backgroundColor: primaryColor,
+      ),
       body: Column(
         children: [
           TextField(
@@ -38,6 +42,7 @@ class NameView extends StatelessWidget {
             child: SizedBox(
               width: double.maxFinite,
               child: ElevatedButton(
+                style: styleButton(primaryColor),
                 child: Text("Change"),
                 onPressed: () {
                   final name = _nameController.text;

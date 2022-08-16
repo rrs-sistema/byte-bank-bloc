@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../database/database.dart';
-import '../models/models.dart';
+import '../../components/components.dart';
+import '../../database/database.dart';
+import '../../models/models.dart';
 
 class ContactForm extends StatefulWidget {
   @override
@@ -16,9 +17,11 @@ class _ContactFormState extends State<ContactForm> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text('New contact'),
+        backgroundColor: primaryColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,6 +54,7 @@ class _ContactFormState extends State<ContactForm> {
               child: SizedBox(
                 width: double.maxFinite,
                 child: ElevatedButton(
+                  style: styleButton(primaryColor),
                   child: Text('Create'),
                   onPressed: () {
                     final String name = _nameController.text;

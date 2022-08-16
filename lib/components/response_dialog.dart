@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../components/components.dart';
+
 class ResponseDialog extends StatelessWidget {
   final String title;
   final String message;
@@ -55,6 +57,7 @@ class ResponseDialog extends StatelessWidget {
       ),
       actions: <Widget>[
         ElevatedButton(
+          style: styleButton(Theme.of(context).primaryColor),
           child: Text(buttonText),
           onPressed: () => Navigator.pop(context),
         )

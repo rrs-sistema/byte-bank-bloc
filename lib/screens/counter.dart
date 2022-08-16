@@ -28,7 +28,10 @@ class CounterView extends StatelessWidget {
     // não temos como saber quando devemos redesenhar
     // final state = context.bloc<CounterCubit>().state;
     return Scaffold(
-      appBar: AppBar(title: const Text("Counter")),
+      appBar: AppBar(
+        title: const Text("Counter"),
+        backgroundColor: Theme.of(context).primaryColor,
+      ),
       body: Center(
         // ruim não sabemos quando rebuildar
         // child: Text("$state", style: textTheme.headline2),

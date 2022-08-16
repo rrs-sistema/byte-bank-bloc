@@ -3,11 +3,15 @@ import 'dart:convert';
 
 import '../../http/http.dart';
 
-const MESSAGES_URI = 'https://gist.githubusercontent.com/rrs-sistema/eaf85e00551430929d693239907b4557/raw/ae2009259809bc377421f94ee61f2688c47ab4c9/i18n.json';
+const MESSAGES_URI = 'https://gist.githubusercontent.com/rrs-sistema/5f62bbc62d1e82e3e77d168f4493814e/raw/df6a1968bb1eb86ba730b888ab57eb8453b9aa22/';
 
 class I18NWebClient {
+  final String viewKey;
+
+  I18NWebClient(this.viewKey);
+
   Future<Map<String, dynamic>> findAll() async {
-    final Response response = await client.get(MESSAGES_URI, headers: {
+    final Response response = await client.get('$MESSAGES_URI$viewKey.json', headers: {
       'Content-Type':  'application/json;charset=UTF-8', 'Charset': 'utf-8'
     });
     final Map<String, dynamic> decodedJson = jsonDecode(response.body);

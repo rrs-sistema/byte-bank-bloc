@@ -28,22 +28,3 @@ class Progress extends StatelessWidget {
   }
 }
 
-class ProgressView extends StatelessWidget {
-
-  String message;
-  ProgressView({String messages = 'Sending...'}) {
-    this.message = messages;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Processing'),
-      ),
-      body: Progress(
-        message: message,
-      ),
-    );
-  }
-}
